@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Astrum Market - Products by Category{% endblock %}
+
+{% block content %}
+
+    <div class="content-container">
+        <h1 class="page-title">Products by Category</h1>
+        <div class="product-category-layout">
+            <aside class="filters-sidebar animate-slide-up">
+                <h2 class="filters-title">Filters</h2>
+                <form id="filter-form" class="filters-form">
+                    <div class="filter-group">
+                        <h3 class="filter-subtitle">Brand</h3>
+                        <label class="filter-option">
+                            <input type="checkbox" name="brand" value="apple">
+                            <span class="checkmark"></span>
+                            Apple
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="brand" value="samsung">
+                            <span class="checkmark"></span>
+                            Samsung
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="brand" value="sony">
+                            <span class="checkmark"></span>
+                            Sony
+                        </label>
+                    </div>
+                    <div class="filter-group">
+                        <h3 class="filter-subtitle">Color</h3>
+                        <label class="filter-option">
+                            <input type="checkbox" name="color" value="black">
+                            <span class="checkmark"></span>
+                            Black
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="color" value="white">
+                            <span class="checkmark"></span>
+                            White
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="color" value="blue">
+                            <span class="checkmark"></span>
+                            Blue
+                        </label>
+                    </div>
+                    <div class="filter-group">
+                        <h3 class="filter-subtitle">Price Range</h3>
+                        <div class="price-range-inputs">
+                            <input type="number" name="min-price" placeholder="Min" class="form-input">
+                            <input type="number" name="max-price" placeholder="Max" class="form-input">
+                        </div>
+                    </div>
+                    <button type="submit" class="filter-button">Apply Filters</button>
+                </form>
+            </aside>
+            <div class="product-content">
+                <div class="product-header">
+                    <p class="product-count">Showing 6 products</p>
+                    <div class="sort-container">
+                        <label for="sort-select" class="sort-label">Sort by:</label>
+                        <select id="sort-select" class="sort-select">
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="name-asc">Name: A to Z</option>
+                            <option value="name-desc">Name: Z to A</option>
+                        </select>
+                    </div>
+                </div>
+
+                {% if products %}
+
+                    {% for product in products %}
+                        <div class="product-grid stagger-animation">
+                            <a href="product-detail.html?id=1" class="product-card animate-scale-up">
+                                <div class="product-image">
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-name">{{ product.name }}</h3>
+                                    <p class="product-price">${{ product.price }}</p>
+                                    <span class="view-details">View Details</span>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h3>No products</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+
+<header class="animate-fade-in">
+    <div class="header-content">
+        <a href="/" class="logo">Astrum Market</a>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'products:product-by-category' %}">Products</a>
+            <a href="{% url 'products:create' %}">Add Product</a>
+            <a href="{% url 'brands:create' %}">Add Brand</a>
+            <a href="{% url 'catalogs:create' %}">Add Category</a>
+            <a href="{% url 'colors:create' %}">Add Color</a>
+        </nav>
+    </div>
+</header>

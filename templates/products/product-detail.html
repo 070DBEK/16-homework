@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Astrum Market - Product Detail{% endblock %}
+
+{% block content %}
+
+    <div class="content-container animate-fade-in">
+        <div class="product-detail">
+            <div class="product-image-container">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            </div>
+            <div class="product-info">
+                <h1 class="product-title">{{ product.name }}</h1>
+                <p class="product-price">${{ product.price }}</p>
+                <div class="product-meta">
+                    <p><strong>Brand:</strong> {{ product.brand.name }}</p>
+                    <p><strong>Color:</strong> {{ product.color.name }}</p>
+                </div>
+                <p class="product-description">
+                    {{ product.description }}
+                </p>
+            </div>
+        </div>
+
+        <div class="reviews-section animate-slide-up">
+            <h2 class="section-title">Reviews</h2>
+            <div class="reviews-container">
+                <div class="review">
+                    <div class="review-header">
+                        <h3 class="reviewer-name">John Doe</h3>
+                        <div class="review-rating">★★★★☆</div>
+                    </div>
+                    <p class="review-content">Great sound quality and comfortable to wear for long periods. Battery life could be better though.</p>
+                </div>
+                <div class="review">
+                    <div class="review-header">
+                        <h3 class="reviewer-name">Jane Smith</h3>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                    <p class="review-content">Absolutely love these headphones! The noise-cancelling feature is a game-changer for my daily commute.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-review-section animate-slide-up">
+            <h2 class="section-title">Add a Review</h2>
+            <form id="review-form" class="review-form">
+                <div class="form-group">
+                    <label for="reviewer-name" class="form-label">Name:</label>
+                    <input type="text" id="reviewer-name" name="reviewer-name" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="review-rating" class="form-label">Rating:</label>
+                    <select id="review-rating" name="review-rating" required class="form-input">
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="review-content" class="form-label">Review:</label>
+                    <textarea id="review-content" name="review-content" required class="form-input"></textarea>
+                </div>
+                <button type="submit" class="submit-button">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

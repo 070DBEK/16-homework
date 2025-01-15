@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Astrum Market - Create Color{% endblock %}
+
+{% block content %}
+
+    <div class="content-container animate-slide-up">
+        <h1 class="page-title">Create New Color</h1>
+        <form id="color-form" class="form" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="color-name" class="form-label">Color Name:</label>
+                <input type="text" id="color-name" name="name" required class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="color-hex" class="form-label">Color Hex Code:</label>
+                <input type="color" id="color-hex" name="hex_code" required class="form-input color-picker">
+            </div>
+            <button type="submit" class="submit-button">Create Color</button>
+        </form>
+    </div>
+
+{% endblock %}

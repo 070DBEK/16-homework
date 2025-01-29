@@ -3,6 +3,7 @@ from .models import Product, Comment
 from brands.models import Brand
 from catalogs.models import Category
 from colors.models import Color
+from django.db.models.functions import Lower
 
 
 def home(request):
@@ -87,9 +88,10 @@ def product_by_category(request):
     elif sort == 'price-desc':
         products = products.order_by('-price')
     elif sort == 'name-asc':
-        products = products.order_by('name')
+        products = products.order_by(Lower('name').asc())
     elif sort == 'name-desc':
-        products = products.order_by('-name')
+        products = products.order_by(Lower('name').desc())
+
     if min_price:
         products = products.filter(price__gte=min_price)
     if max_price:
@@ -100,6 +102,7 @@ def product_by_category(request):
         products = products.filter(brand__name=brand_name)
     if color_name:
         products = products.filter(color__name=color_name)
+
     ctx = {
         'products': products,
         'catalogs': catalogs,

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
+from .models import Product, Comment
 from brands.models import Brand
 from catalogs.models import Category
 from colors.models import Color
@@ -7,11 +7,7 @@ from colors.models import Color
 
 def home(request):
     products = Product.objects.all()
-    catalogs = Category.objects.all()
-    category_id = request.GET.get('category')
-    if category_id:
-        products = products.filter(category__id=category_id)
-    ctx = {'products':products, 'catalogs':catalogs}
+    ctx = {'products':products}
     return render(request, 'index.html', ctx)
 
 
@@ -51,7 +47,24 @@ def create_product(request):
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    ctx = {'product':product}
+    comments = Comment.objects.filter(product=product)
+    if request.method == "POST":
+        name = request.POST.get('name')
+        rating = request.POST.get('rating')
+        desc = request.POST.get('desc')
+        if name and rating and desc:
+            Comment.objects.create(
+                product=product,
+                name=name,
+                rating=rating,
+                desc=desc,
+            )
+        return redirect('products:detail', product_id=product.id)
+
+    ctx = {
+        'product': product,
+        'comments': comments,
+    }
     return render(request, 'products/product-detail.html', ctx)
 
 
@@ -60,19 +73,43 @@ def product_by_category(request):
     catalogs = Category.objects.all()
     brands = Brand.objects.all()
     colors = Color.objects.all()
+
+    sort = request.GET.get('sort')
+
     category_id = request.GET.get('category')
-    brand_id = request.GET.get('brand')
-    color_id = request.GET.get('color')
+    brand_name = request.GET.get('brand')
+    color_name = request.GET.get('color')
+    min_price = request.GET.get('min-price')
+    max_price = request.GET.get('max-price')
+
+    if sort == 'price-asc':
+        products = products.order_by('price')
+    elif sort == 'price-desc':
+        products = products.order_by('-price')
+    elif sort == 'name-asc':
+        products = products.order_by('name')
+    elif sort == 'name-desc':
+        products = products.order_by('-name')
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
     if category_id:
-                products = products.filter(category__id=category_id)
-    if brand_id:
-        products = products.filter(brand__id=brand_id)
-    if color_id:
-        products = products.filter(color__id=color_id)
+        products = products.filter(category__id=category_id)
+    if brand_name:
+        products = products.filter(brand__name=brand_name)
+    if color_name:
+        products = products.filter(color__name=color_name)
     ctx = {
-        'products':products,
-        'catalogs':catalogs,
-        'brands':brands,
-        'colors':colors
+        'products': products,
+        'catalogs': catalogs,
+        'brands': brands,
+        'colors': colors,
+        'sort': sort,
     }
+
     return render(request, 'products/product-by-category.html', ctx)
+
+
+
+

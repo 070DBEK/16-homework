@@ -74,14 +74,23 @@ def product_by_category(request):
     catalogs = Category.objects.all()
     brands = Brand.objects.all()
     colors = Color.objects.all()
-
-    sort = request.GET.get('sort')
-
-    category_id = request.GET.get('category')
-    brand_name = request.GET.get('brand')
-    color_name = request.GET.get('color')
+    selected_brands = request.GET.getlist('brand')
+    selected_colors = request.GET.getlist('color')
     min_price = request.GET.get('min-price')
     max_price = request.GET.get('max-price')
+    sort = request.GET.get('sort')
+    category_id = request.GET.get('category')
+
+    if selected_brands:
+        products = products.filter(brand__name__in=selected_brands)
+    if selected_colors:
+        products = products.filter(color__name__in=selected_colors)
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
+    if category_id:
+        products = products.filter(category__id=category_id)
 
     if sort == 'price-asc':
         products = products.order_by('price')
@@ -92,26 +101,18 @@ def product_by_category(request):
     elif sort == 'name-desc':
         products = products.order_by(Lower('name').desc())
 
-    if min_price:
-        products = products.filter(price__gte=min_price)
-    if max_price:
-        products = products.filter(price__lte=max_price)
-    if category_id:
-        products = products.filter(category__id=category_id)
-    if brand_name:
-        products = products.filter(brand__name=brand_name)
-    if color_name:
-        products = products.filter(color__name=color_name)
-
-    ctx = {
+    context = {
         'products': products,
         'catalogs': catalogs,
         'brands': brands,
         'colors': colors,
+        'selected_brands': selected_brands,
+        'selected_colors': selected_colors,
+        'min_price': min_price or '',
+        'max_price': max_price or '',
         'sort': sort,
     }
-
-    return render(request, 'products/product-by-category.html', ctx)
+    return render(request, 'products/product-by-category.html', context)
 
 
 
